@@ -47,6 +47,7 @@ void Peeps::drainDeathQueue()
         auto & indiv = peeps[index];
         grid.set(indiv.loc, 0);
         indiv.alive = false;
+        indiv.infected = false;
     }
     deathQueue.clear();
 }

@@ -57,6 +57,13 @@ struct Params {
     bool deterministic;
     unsigned RNGSeed; // >= 0
 
+
+    unsigned numToInfect;
+    float probInfect;
+    float probBetter;
+    float probDying;
+
+
     // These must not change after initialization
     uint16_t sizeX; // 2..0x10000
     uint16_t sizeY; // 2..0x10000

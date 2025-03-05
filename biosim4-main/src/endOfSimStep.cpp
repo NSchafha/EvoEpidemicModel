@@ -75,6 +75,32 @@ void endOfSimStep(unsigned simStep, unsigned generation)
         }
     }
 
+
+
+    if (p.challenge == CHALLENGE_INFECTED)
+    {
+        for (uint16_t index = 1; index <= p.population; ++index) // index 0 is reserved
+        {
+            Indiv &indiv = peeps[index];
+            if (indiv.alive)
+            {
+                if (indiv.alive && indiv.infected)
+                {
+                    if (randomUint() / (float)RANDOM_UINT_MAX < p.probDying)
+                    {
+                        peeps.queueForDeath(indiv);
+                    }
+                    if (randomUint() / (float)RANDOM_UINT_MAX < p.probBetter)
+                    {
+                        indiv.infected = false;
+                    }
+                }
+            }
+        }
+    }
+
+
+
     peeps.drainDeathQueue();
     peeps.drainMoveQueue();
     signals.fade(0); // takes layerNum  todo!!!

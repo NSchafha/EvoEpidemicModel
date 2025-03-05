@@ -25,6 +25,8 @@ void Indiv::initialize(uint16_t index_, Coord loc_, Genome &&genome_)
     challengeBits = (unsigned)false; // will be set true when some task gets accomplished
     genome = std::move(genome_);
     createWiringFromGenome();
+
+    infected = false;
 }
 
 } // end namespace BS

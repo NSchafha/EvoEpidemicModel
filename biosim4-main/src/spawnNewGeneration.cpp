@@ -28,6 +28,11 @@ void initializeGeneration0()
     // just clear and reuse it
     for (uint16_t index = 1; index <= p.population; ++index) {
         peeps[index].initialize(index, grid.findEmptyLocation(), makeRandomGenome());
+        
+        if (index <= p.numToInfect)
+        {
+            peeps[index].infected = true;
+        }
     }
 }
 
@@ -50,6 +55,11 @@ void initializeNewGeneration(const std::vector<Genome> &parentGenomes, unsigned 
     // Spawn the population. This overwrites all the elements of peeps[]
     for (uint16_t index = 1; index <= p.population; ++index) {
         peeps[index].initialize(index, grid.findEmptyLocation(), generateChildGenome(parentGenomes));
+    
+        if (index <= p.numToInfect)
+        {
+            peeps[index].infected = true;
+        }
     }
 }
 

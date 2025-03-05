@@ -65,6 +65,12 @@ void ParamManager::setDefaults()
     privParams.RNGSeed = 12345678;
     privParams.graphLogUpdateCommand = "/usr/bin/gnuplot --persist ./tools/graphlog.gp";
     privParams.parameterChangeGenerationNumber = 0;
+
+    // Additions
+    privParams.numToInfect = 10;
+    privParams.probInfect = 0.1;
+    privParams.probBetter = 0.2;
+    privParams.probDying = 0.05;
 }
 
 
@@ -257,6 +263,19 @@ void ParamManager::ingestParameter(std::string name, std::string val)
         }
         else if (name == "rngseed" && isUint) {
             privParams.RNGSeed = uVal; break;
+        }
+        // Additions
+        else if (name == "numtoinfect" && isUint && uVal > 0) {
+            privParams.numToInfect = uVal; break;
+        }
+        else if (name == "probinfect" && isFloat && dVal >= 0.0 && dVal <= 1.0) {
+            privParams.probInfect = dVal; break;
+        }
+        else if (name == "probbetter" && isFloat && dVal >= 0.0 && dVal <= 1.0) {
+            privParams.probBetter = dVal; break;
+        }
+        else if (name == "probdying" && isFloat && dVal >= 0.0 && dVal <= 1.0) {
+            privParams.probDying = dVal; break;
         }
         else {
             std::cout << "Invalid param: " << name << " = " << val << std::endl;

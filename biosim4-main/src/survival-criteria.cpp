@@ -337,6 +337,10 @@ std::pair<bool, float> passedSurvivalCriterion(const Indiv &indiv, unsigned chal
                 : std::pair<bool, float> { false, 0.0 };
         }
 
+    // All indivs survive if alive
+    case CHALLENGE_INFECTED:
+        return { true, 1.0 };
+
     default:
         assert(false);
     }

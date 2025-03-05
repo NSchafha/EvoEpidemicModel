@@ -131,6 +131,17 @@ void simulator(int argc, char **argv)
 
     unsigned generation = 0;
     initializeGeneration0(); // starting population
+    
+    unsigned count = 0;
+    for (unsigned indivIndex = 1; indivIndex <= p.population; ++indivIndex)
+    {
+        if (peeps[indivIndex].alive && peeps[indivIndex].infected)
+        {
+            ++count;
+        }
+    }
+    std::cout << "Initial infected count: " << count << std::endl;
+    
     runMode = RunMode::RUN;
     unsigned murderCount;
 
@@ -154,10 +165,33 @@ void simulator(int argc, char **argv)
                     }
                 }
 
+                auto f = [&](Coord loc2infect)
+                {
+                    if (grid.isOccupiedAt(loc2infect))
+                    {
+                        Indiv &indiv = peeps.getIndiv(loc2infect);
+                        if (indiv.alive && !indiv.infected)
+                        {
+                            if (randomUint() / (float)RANDOM_UINT_MAX < p.probInfect)
+                            {
+                                indiv.infected = true;
+                            }
+                        }
+                    }
+                };
+
                 // In single-thread mode: this executes deferred, queued deaths and movements,
                 // updates signal layers (pheromone), etc.
                 #pragma omp single
                 {
+                    for (unsigned indivIndex = 1; indivIndex <= p.population; ++indivIndex)
+                    {
+                        if (peeps[indivIndex].alive && peeps[indivIndex].infected)
+                        {
+                            visitNeighborhood(peeps[indivIndex].loc, 1.5, f);
+                        }
+                    }
+
                     murderCount += peeps.deathQueueSize();
                     endOfSimStep(simStep, generation);
                 }
@@ -165,6 +199,27 @@ void simulator(int argc, char **argv)
 
             #pragma omp single
             {
+
+                unsigned numInfected = 0;
+                unsigned numKilled = 0;
+                for (unsigned indivIndex = 1; indivIndex <= p.population; ++indivIndex)
+                {
+                    if (peeps[indivIndex].alive)
+                    {
+                        if (peeps[indivIndex].infected)
+                        {
+                            ++numInfected;
+                        }
+                    }
+                    else
+                    {
+                        ++numKilled;
+                    }
+                }
+                std::cout << "Number of infected: " << numInfected << std::endl;
+                std::cout << "Number of killed: " << numKilled << std::endl;
+
+
                 endOfGeneration(generation);
                 paramManager.updateFromConfigFile(generation + 1);
                 unsigned numberSurvivors = spawnNewGeneration(generation, murderCount);

@@ -37,6 +37,8 @@ constexpr unsigned CHALLENGE_LOCATION_SEQUENCE = 16;
 constexpr unsigned CHALLENGE_ALTRUISM = 17;
 constexpr unsigned CHALLENGE_ALTRUISM_SACRIFICE = 18;
 
+constexpr unsigned CHALLENGE_INFECTED = 19;
+
 extern ParamManager paramManager; // manages simulator params from the config file plus more
 extern const Params &p; // read-only simulator config params
 extern Grid grid;  // 2D arena where the individuals live
